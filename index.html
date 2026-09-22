@@ -167,6 +167,148 @@ body.dark .welcome-logo{filter:drop-shadow(0 12px 25px rgba(0,0,0,.5))}
   .gdate{display:none}
   footer{padding-bottom:20px}
 }
+
+/* ===== THIS WEEK + CALENDAR/LIST VIEW ===== */
+.week-dashboard{
+  margin:0 0 18px;
+  border:1px solid var(--line);
+  background:var(--surface);
+  border-radius:18px;
+  padding:16px;
+  box-shadow:var(--shadow);
+}
+.week-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:12px;
+}
+.week-title-wrap{min-width:0}
+.week-kicker{
+  color:var(--muted);
+  font-size:.72rem;
+  font-weight:900;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+.week-title{font-size:1.15rem;font-weight:900;margin:3px 0 0}
+.week-range{color:var(--muted);font-size:.78rem;margin-top:3px}
+.week-list{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:9px;
+}
+.week-item{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  min-width:0;
+  padding:11px;
+  border:1px solid var(--line);
+  background:var(--surface2);
+  border-radius:13px;
+  cursor:pointer;
+  transition:.18s ease;
+}
+.week-item:hover{transform:translateY(-1px);box-shadow:0 7px 18px rgba(18,32,48,.07)}
+.week-item-dot{
+  width:9px;height:9px;border-radius:50%;
+  margin-top:5px;flex:0 0 9px;
+}
+.week-item-main{min-width:0}
+.week-item-date{font-size:.72rem;font-weight:900;color:var(--accent2)}
+.week-item-title{
+  font-size:.88rem;font-weight:800;margin-top:2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.week-item-meta{
+  color:var(--muted);font-size:.72rem;margin-top:3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.week-empty{padding:14px;color:var(--muted);font-size:.84rem;text-align:center;border:1px dashed var(--line);border-radius:12px}
+.view-switch{
+  display:inline-flex;
+  padding:3px;
+  border:1px solid var(--line);
+  background:var(--surface);
+  border-radius:12px;
+  gap:3px;
+}
+.view-switch button{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  padding:8px 11px;
+  border-radius:9px;
+  font-size:.78rem;
+  font-weight:800;
+  cursor:pointer;
+}
+.view-switch button.active{
+  background:var(--accent);
+  color:#fff;
+  box-shadow:0 3px 9px rgba(23,63,95,.18);
+}
+body.dark .week-item:hover{box-shadow:0 7px 18px rgba(0,0,0,.2)}
+body.dark .view-switch button.active{background:var(--accent2)}
+#calendarRoot.list-view .calendar{display:none}
+#calendarRoot.list-view .list-month{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:15px;
+  overflow:hidden;
+  margin-bottom:18px;
+  box-shadow:var(--shadow);
+}
+.list-month-head{
+  padding:14px 16px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.list-month-head h3{margin:0;font-size:1rem}
+.list-month-head span{font-size:.72rem;color:var(--muted)}
+.list-event{
+  display:flex;
+  gap:12px;
+  padding:13px 15px;
+  border-bottom:1px solid var(--line);
+  cursor:pointer;
+}
+.list-event:last-child{border-bottom:0}
+.list-date{
+  flex:0 0 62px;
+  text-align:center;
+  padding:8px 5px;
+  border-radius:11px;
+  background:var(--surface2);
+  border:1px solid var(--line);
+}
+.list-date strong{display:block;font-size:1.2rem;line-height:1}
+.list-date small{display:block;color:var(--muted);font-size:.65rem;margin-top:3px}
+.list-event-main{min-width:0;flex:1}
+.list-event-title{font-size:.9rem;font-weight:850}
+.list-event-group{font-size:.73rem;color:var(--accent2);font-weight:800;margin-top:2px}
+.list-event-meta{font-size:.73rem;color:var(--muted);margin-top:4px;line-height:1.45}
+.list-empty{padding:30px;text-align:center;color:var(--muted)}
+@media(max-width:700px){
+  .week-dashboard{padding:13px;border-radius:15px}
+  .week-head{align-items:flex-start;flex-direction:column}
+  .week-list{grid-template-columns:1fr}
+  .view-switch{width:100%}
+  .view-switch button{flex:1}
+  .list-event{padding:11px 10px}
+  .list-date{flex-basis:55px}
+}
+@media(max-width:430px){
+  .week-item{padding:10px}
+  .week-item-title{font-size:.82rem}
+  .week-item-meta{font-size:.68rem}
+}
+
 </style>
 </head>
 <body>
@@ -197,6 +339,22 @@ body.dark .welcome-logo{filter:drop-shadow(0 12px 25px rgba(0,0,0,.5))}
 <select id="group" onchange="render()"><option value="">ሁሉም ፕሮግራሞች</option></select>
 <select id="month" onchange="render()"><option value="">ሁሉም ወራት — 2019 ዓ.ም</option></select>
 </div>
+
+<section class="week-dashboard" id="weekDashboard" aria-label="This Week">
+  <div class="week-head">
+    <div class="week-title-wrap">
+      <div class="week-kicker" data-week-i18n="kicker">THIS WEEK</div>
+      <div class="week-title" id="weekTitle">—</div>
+      <div class="week-range" id="weekRange">—</div>
+    </div>
+    <div class="view-switch" aria-label="Calendar or list view">
+      <button id="calendarViewBtn" class="active" type="button" onclick="setCalendarView('calendar')">▦ Calendar</button>
+      <button id="listViewBtn" type="button" onclick="setCalendarView('list')">☷ List</button>
+    </div>
+  </div>
+  <div id="weekEvents" class="week-list"></div>
+</section>
+
 <div class="stats"><div class="stat"><b id="eventCount">0</b><span>የተመዘገቡ የትምህርት ቀናት</span></div><div class="stat"><b id="programCount">0</b><span>ፕሮግራሞች</span></div><div class="stat"><b>13</b><span>የ2019 ዓ.ም ወራት</span></div></div>
 
 <section id="todayDashboard" class="today-dashboard" aria-label="Today Dashboard">
@@ -630,6 +788,201 @@ if(_oldApplyLanguage){
 document.addEventListener("DOMContentLoaded",()=>{
   initTheme();
   updateTodayDashboard();
+});
+
+
+/* ===== THIS WEEK + LIST VIEW ===== */
+const WEEK_I18N = {
+  am:{kicker:"የዚህ ሳምንት",calendar:"▦ ካሌንደር",list:"☷ ዝርዝር",none:"በዚህ ሳምንት የተመዘገበ ፕሮግራም የለም።",range:"የሳምንቱ ፕሮግራሞች"},
+  en:{kicker:"THIS WEEK",calendar:"▦ Calendar",list:"☷ List",none:"No programs scheduled this week.",range:"Week programs"}
+};
+function weekText(k){return WEEK_I18N[LANG==="en"?"en":"am"][k]||k;}
+
+let CALENDAR_VIEW = localStorage.getItem("mhss-calendar-view") || "calendar";
+
+function currentEthiopianTarget(){
+  const now=new Date();
+  const gd=new Date(Date.UTC(now.getFullYear(),now.getMonth(),now.getDate()));
+  for(let m=1;m<=13;m++){
+    const days=m===13?5:30;
+    for(let d=1;d<=days;d++){
+      const ed=ethToGregorian(2019,m,d);
+      if(ed.getUTCFullYear()===gd.getUTCFullYear() &&
+         ed.getUTCMonth()===gd.getUTCMonth() &&
+         ed.getUTCDate()===gd.getUTCDate()){
+        return {m,d,key:key(2019,m,d)};
+      }
+    }
+  }
+  return null;
+}
+
+function weekStartKey(target){
+  if(!target)return null;
+  const gd=ethToGregorian(2019,target.m,target.d);
+  const monday=(gd.getUTCDay()+6)%7;
+  const start=new Date(gd.getTime()-monday*86400000);
+  let found=null;
+  for(let m=1;m<=13 && !found;m++){
+    const days=m===13?5:30;
+    for(let d=1;d<=days;d++){
+      const ed=ethToGregorian(2019,m,d);
+      if(ed.getTime()===start.getTime()) { found={m,d}; break; }
+    }
+  }
+  return found ? key(2019,found.m,found.d) : null;
+}
+
+function addDaysToEthKey(k,amount){
+  const p=parseKey(k);
+  let m=p.m,d=p.d;
+  for(let i=0;i<Math.abs(amount);i++){
+    if(amount>0){
+      d++;
+      if(d>(m===13?5:30)){m++;d=1;}
+    }else{
+      d--;
+      if(d<1){m--;if(m<1)m=1;d=m===13?5:30;}
+    }
+  }
+  return key(2019,m,d);
+}
+
+function updateThisWeek(){
+  const box=document.getElementById("weekEvents");
+  const title=document.getElementById("weekTitle");
+  const range=document.getElementById("weekRange");
+  if(!box||!title||!range)return;
+
+  const target=currentEthiopianTarget();
+  if(!target){
+    title.textContent=LANG==="en"?"2019 E.C. calendar":"የ2019 ዓ.ም ካሌንደር";
+    range.textContent=weekText("range");
+    box.innerHTML=`<div class="week-empty">${esc(weekText("none"))}</div>`;
+    return;
+  }
+
+  const start=weekStartKey(target);
+  if(!start){
+    box.innerHTML=`<div class="week-empty">${esc(weekText("none"))}</div>`;
+    return;
+  }
+
+  const end=addDaysToEthKey(start,6);
+  const all=(DATA||[]).slice().sort((a,b)=>a.date.localeCompare(b.date));
+  const events=all.filter(e=>e.date>=start && e.date<=end);
+
+  const sp=parseKey(start), ep=parseKey(end);
+  const startG=ethToGregorian(2019,sp.m,sp.d);
+  const endG=ethToGregorian(2019,ep.m,ep.d);
+  const months=currentMonths();
+  title.textContent=LANG==="en"
+    ? `${months[sp.m-1]} ${sp.d} – ${months[ep.m-1]} ${ep.d}, 2019 E.C.`
+    : `${months[sp.m-1]} ${sp.d} – ${months[ep.m-1]} ${ep.d}, 2019 ዓ.ም`;
+  range.textContent=`${formatGregorian(startG)} — ${formatGregorian(endG)}`;
+
+  if(!events.length){
+    box.innerHTML=`<div class="week-empty">${esc(weekText("none"))}</div>`;
+    return;
+  }
+
+  box.innerHTML=events.slice(0,8).map(e=>{
+    const p=parseKey(e.date), gd=ethToGregorian(p.y,p.m,p.d);
+    const type=normalizeProgramType(e);
+    const titleText=(e.items||[]).map(trItem).join(" • ");
+    return `<div class="week-item" onclick="openDay('${e.date}')">
+      <span class="week-item-dot" style="background:var(--prog-${type})"></span>
+      <div class="week-item-main">
+        <div class="week-item-date">${esc(currentMonths()[p.m-1])} ${p.d} · ${esc(formatGregorian(gd))}</div>
+        <div class="week-item-title">${esc(titleText||trGroup(e.group))}</div>
+        <div class="week-item-meta">${esc(trGroup(e.group))}</div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function setCalendarView(view){
+  CALENDAR_VIEW=view;
+  localStorage.setItem("mhss-calendar-view",view);
+  const root=document.getElementById("calendarRoot");
+  const cb=document.getElementById("calendarViewBtn");
+  const lb=document.getElementById("listViewBtn");
+  if(!root)return;
+  root.classList.toggle("list-view",view==="list");
+  if(cb)cb.classList.toggle("active",view==="calendar");
+  if(lb)lb.classList.toggle("active",view==="list");
+  if(cb)cb.textContent=weekText("calendar");
+  if(lb)lb.textContent=weekText("list");
+  render();
+}
+
+function renderListView(){
+  const data=filtered();
+  const map=new Map();
+  data.forEach(e=>{if(!map.has(e.date))map.set(e.date,[]);map.get(e.date).push(e)});
+  const selected=document.getElementById('month').value;
+  const months=selected?[Number(selected)]:Array.from({length:13},(_,i)=>i+1);
+  const root=document.getElementById('calendarRoot');
+  root.innerHTML='';
+  let total=0;
+
+  months.forEach(m=>{
+    const monthEvents=data.filter(e=>Number(e.date.split('-')[1])===m)
+      .sort((a,b)=>a.date.localeCompare(b.date));
+    if(!monthEvents.length)return;
+    total+=monthEvents.length;
+    const groups={};
+    monthEvents.forEach(e=>{(groups[e.date]??=[]).push(e)});
+    let out=`<section class="list-month">
+      <div class="list-month-head">
+        <h3>${esc(currentMonths()[m-1])} <small>${LANG==="en"?"2019 E.C.":"2019 ዓ.ም"}</small></h3>
+        <span>${monthEvents.length} ${LANG==="en"?"entries":"መረጃዎች"}</span>
+      </div>`;
+    Object.keys(groups).sort().forEach(k=>{
+      const p=parseKey(k), gd=ethToGregorian(p.y,p.m,p.d);
+      groups[k].forEach(e=>{
+        const type=normalizeProgramType(e);
+        const title=(e.items||[]).map(trItem).join(" • ");
+        out+=`<div class="list-event" onclick="openDay('${k}')">
+          <div class="list-date"><strong>${p.d}</strong><small>${esc(formatGregorian(gd).split(' ')[1]||"")}</small></div>
+          <div class="list-event-main" style="border-left:4px solid var(--prog-${type});padding-left:10px">
+            <div class="list-event-title">${esc(title||trGroup(e.group))}</div>
+            <div class="list-event-group">${esc(trGroup(e.group))}</div>
+            <div class="list-event-meta">${esc((e.items||[]).slice(1).map(trItem).join(" • "))}</div>
+          </div>
+        </div>`;
+      });
+    });
+    out+=`</section>`;
+    root.insertAdjacentHTML('beforeend',out);
+  });
+
+  if(!total)root.innerHTML=`<div class="emptyState">${esc(I18N[LANG].noData)}</div>`;
+}
+
+const _originalRender = render;
+render = function(){
+  if(CALENDAR_VIEW==="list"){
+    const data=filtered();
+    document.getElementById('eventCount').textContent=data.length;
+    document.getElementById('programCount').textContent=new Set(data.map(e=>e.group)).size;
+    renderListView();
+  }else{
+    _originalRender();
+  }
+  updateThisWeek();
+};
+
+const _oldToggleLang = toggleLang;
+toggleLang = function(){
+  _oldToggleLang();
+  setCalendarView(CALENDAR_VIEW);
+  updateThisWeek();
+};
+
+document.addEventListener("DOMContentLoaded",()=>{
+  setCalendarView(CALENDAR_VIEW);
+  updateThisWeek();
 });
 
 </script>
