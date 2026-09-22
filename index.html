@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>2019 ዓ.ም — የትምህርት ቀናት</title>
+<style>
+:root{--bg:#f4f6f8;--surface:#fff;--surface2:#f8fafc;--text:#18212f;--muted:#687386;--line:#e5e9ef;--accent:#173f5f;--accent2:#245b7a;--gold:#c99a3b;--soft:#eef4f8;--shadow:0 14px 40px rgba(18,32,48,.07)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans Ethiopic","Abyssinica SIL",system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+button,input,select{font:inherit}.wrap{width:min(1180px,calc(100% - 32px));margin:auto}
+#welcome{position:fixed;inset:0;z-index:9999;background:linear-gradient(145deg,#102d43,#173f5f 55%,#102d43);display:grid;place-items:center;color:#fff;transition:opacity .45s ease,visibility .45s ease}
+#welcome.hide{opacity:0;visibility:hidden;pointer-events:none}.welcome-inner{text-align:center;padding:30px}.welcome-logo{width:112px;height:112px;object-fit:contain;margin:0 auto 22px;filter:drop-shadow(0 12px 25px rgba(0,0,0,.22))}.welcome-am{font-size:25px;font-weight:800;letter-spacing:.2px;margin:0}.welcome-en{font-size:15px;letter-spacing:1.2px;margin:8px 0 0;color:#dce8ef}.welcome-line{width:48px;height:2px;background:var(--gold);margin:20px auto 0;border-radius:99px}
+header{background:rgba(255,255,255,.96);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;backdrop-filter:blur(12px)}.top{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{display:flex;align-items:center;gap:12px}.brand-logo{width:48px;height:48px;object-fit:contain;border-radius:12px}.brand h1{font-size:16px;margin:0;font-weight:800}.brand p{margin:3px 0 0;color:var(--muted);font-size:11px}.controls{display:flex;gap:8px}.controls button{border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:10px;padding:9px 13px;cursor:pointer}.controls button:hover{border-color:#cbd4de;background:var(--surface2)}
+.hero{padding:34px 0 18px}.eyebrow{font-size:12px;font-weight:800;color:var(--accent2);letter-spacing:.08em;text-transform:uppercase}.hero h2{font-size:clamp(25px,4vw,36px);line-height:1.15;margin:7px 0}.hero p{color:var(--muted);margin:0;max-width:700px;font-size:14px}
+.filters{display:flex;gap:9px;flex-wrap:wrap;margin:12px 0 18px}.filters input,.filters select{border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:10px;padding:10px 12px;min-width:190px;outline:none}.filters input{flex:1;min-width:230px}.filters input:focus,.filters select:focus{border-color:#9fb5c6;box-shadow:0 0 0 3px rgba(36,91,122,.08)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 20px}.stat{background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:13px 15px;box-shadow:0 5px 18px rgba(18,32,48,.035)}.stat b{font-size:21px}.stat span{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+.calendar{background:var(--surface);border:1px solid var(--line);border-radius:15px;overflow:hidden;margin-bottom:18px;box-shadow:var(--shadow)}.monthbar{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:15px 17px;background:var(--surface);border-bottom:1px solid var(--line)}.monthbar h3{margin:0;font-size:19px}.monthbar h3 small{font-size:11px;color:var(--muted);font-weight:500;margin-left:5px}.monthbar>small{color:var(--muted);font-size:11px;text-align:right}
+.grid{display:grid;grid-template-columns:repeat(7,1fr)}.wd{padding:9px 5px;text-align:center;background:var(--surface2);color:var(--muted);font-size:11px;font-weight:800;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.day{min-height:108px;padding:8px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:#fff;cursor:pointer;transition:background .15s,transform .15s}.day:hover{background:#fbfcfd}.day.empty{background:#fafbfc;cursor:default}.day.has{background:#fcfdff}.day:last-child{border-right:0}.num{font-weight:800;font-size:14px;display:flex;align-items:baseline;justify-content:space-between;gap:5px}.gdate{font-size:9px;color:#98a1ad;font-weight:500;white-space:nowrap}.chips{display:flex;flex-direction:column;gap:4px;margin-top:7px}.chip{font-size:9.5px;line-height:1.25;padding:4px 5px;border-radius:6px;background:var(--soft);color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.more{font-size:9px;color:var(--muted);padding:2px 4px}.emptyState{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:35px;text-align:center;color:var(--muted)}
+footer{width:min(1180px,calc(100% - 32px));margin:0 auto;padding:15px 0 28px;color:var(--muted);font-size:11px;text-align:center}
+.modal{position:fixed;inset:0;background:rgba(12,22,32,.48);display:none;align-items:center;justify-content:center;padding:18px;z-index:50;backdrop-filter:blur(4px)}.modal.show{display:flex}.dialog{width:min(560px,100%);max-height:82vh;overflow:auto;background:#fff;border-radius:16px;box-shadow:0 25px 70px rgba(0,0,0,.22)}.dialogHead{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;padding:17px 18px;border-bottom:1px solid var(--line)}.dialogHead h3{margin:0;font-size:19px}.dialogHead .meta,.event .meta{color:var(--muted);font-size:11px;line-height:1.6;margin-top:4px}.close{border:0;background:var(--surface2);width:32px;height:32px;border-radius:9px;cursor:pointer;font-size:21px;color:var(--muted)}#modalBody{padding:15px 18px}.event{padding:12px 0;border-bottom:1px solid var(--line)}.event:last-child{border-bottom:0}.event b{font-size:13px}
+@media(max-width:760px){.wrap{width:min(100% - 20px,1180px)}.top{min-height:68px}.brand p{display:none}.controls button{padding:8px 10px}.hero{padding-top:25px}.stats{grid-template-columns:1fr 1fr}.stats .stat:last-child{grid-column:1/-1}.monthbar{align-items:flex-start;flex-direction:column}.monthbar>small{text-align:left}.day{min-height:86px;padding:6px}.wd{font-size:10px}.gdate{display:none}.chip{font-size:8.5px}.num{font-size:13px}.filters input,.filters select{min-width:0;width:100%}}
+@media(max-width:480px){.stats{grid-template-columns:1fr}.stats .stat:last-child{grid-column:auto}.day{min-height:70px}.chips{display:none}.day.has::after{content:"•";display:block;color:var(--gold);font-size:17px;line-height:12px;margin-top:5px;text-align:center}.monthbar h3{font-size:17px}}
+@media print{#welcome,header,.hero,.filters,.stats,footer,.modal{display:none!important}.wrap{width:100%}.calendar{box-shadow:none;break-inside:avoid}.day{min-height:95px}}
+
+/* ===== NEW: Today Dashboard / Program Colors / Theme ===== */
+:root{
+  --prog-default:#6d5dfc;
+  --prog-lesson:#2563eb;
+  --prog-exam:#dc2626;
+  --prog-event:#7c3aed;
+  --prog-meeting:#059669;
+  --prog-holiday:#d97706;
+  --today-ring:#f59e0b;
+}
+body.dark{
+  --bg:#0b1020 !important;
+  --card:#111827 !important;
+  --text:#eef2ff !important;
+  --muted:#a9b4cc !important;
+  --line:#273449 !important;
+}
+.theme-toggle,.today-dashboard-btn{
+  border:1px solid var(--line);
+  background:var(--card);
+  color:var(--text);
+  border-radius:12px;
+  padding:9px 12px;
+  cursor:pointer;
+  font-weight:700;
+  transition:.2s ease;
+}
+.theme-toggle:hover,.today-dashboard-btn:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(0,0,0,.08)}
+.today-dashboard{
+  margin:18px 0;
+  display:grid;
+  grid-template-columns:1.25fr .75fr;
+  gap:16px;
+}
+.today-card,.today-list{
+  border:1px solid var(--line);
+  background:var(--card);
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 12px 30px rgba(0,0,0,.06);
+}
+.today-kicker{font-size:.78rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.today-date{font-size:1.8rem;font-weight:900;margin:5px 0 2px}
+.today-gdate{color:var(--muted);font-size:.9rem}
+.today-event{
+  display:flex;gap:12px;align-items:flex-start;
+  padding:12px 0;border-top:1px solid var(--line);
+}
+.today-dot{width:10px;height:10px;border-radius:50%;margin-top:6px;flex:0 0 10px;background:var(--prog-default)}
+.today-event-title{font-weight:800}
+.today-event-sub{color:var(--muted);font-size:.9rem;margin-top:3px}
+.program-chip{display:inline-flex;align-items:center;border-radius:999px;padding:4px 8px;font-size:.72rem;font-weight:800;margin-top:7px}
+.color-lesson{background:color-mix(in srgb,var(--prog-lesson) 14%,transparent);color:var(--prog-lesson)}
+.color-exam{background:color-mix(in srgb,var(--prog-exam) 14%,transparent);color:var(--prog-exam)}
+.color-event{background:color-mix(in srgb,var(--prog-event) 14%,transparent);color:var(--prog-event)}
+.color-meeting{background:color-mix(in srgb,var(--prog-meeting) 14%,transparent);color:var(--prog-meeting)}
+.color-holiday{background:color-mix(in srgb,var(--prog-holiday) 14%,transparent);color:var(--prog-holiday)}
+.today-empty{color:var(--muted);padding:16px 0}
+.next-title{font-size:1.1rem;font-weight:900;margin-bottom:8px}
+.program-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.legend-item{font-size:.78rem;font-weight:700;color:var(--muted)}
+.legend-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
+body.dark .today-card,body.dark .today-list{box-shadow:0 12px 30px rgba(0,0,0,.22)}
+@media(max-width:800px){
+  .today-dashboard{grid-template-columns:1fr}
+  .today-date{font-size:1.45rem}
+}
+
+</style>
+</head>
+<body>
+<div id="welcome" aria-label="Welcome">
+  <div class="welcome-inner">
+    <img class="welcome-logo" src="logo2.png" alt="Meserete Hiwot Sunday School logo">
+    <p class="welcome-am">መሠረተ ሕይወት ሰንበት ትምህርት</p>
+    <p class="welcome-en">MESERETE HIWOT SUNDAY SCHOOL</p>
+    <div class="welcome-line"></div>
+  </div>
+</div>
+<header><div class="wrap top">
+  <div class="brand">
+    <img class="brand-logo" src="logo2.png" alt="Meserete Hiwot Sunday School logo">
+    <div><h1>መሠረተ ሕይወት ሰንበት ትምህርት</h1><p>Meserete Hiwot Sunday School • 2019 ዓ.ም</p></div>
+  </div>
+  <div class="controls">
+<div class="new-feature-controls" style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 0;">
+  <button class="theme-toggle" id="themeToggle" type="button" onclick="toggleTheme()">🌙 Dark / Light</button>
+  <button class="today-dashboard-btn" type="button" onclick="scrollToToday()">📅 Today Dashboard</button>
+</div>
+<button id="langBtn" onclick="toggleLang()">English</button><button id="todayBtn" onclick="goToday()">ዛሬ</button><button id="printBtn" onclick="window.print()">አትም</button></div>
+</div></header>
+<main class="wrap">
+<section class="hero"><div class="eyebrow">MESERETE HIWOT SUNDAY SCHOOL</div><h2 id="heroTitle">2019 ዓ.ም የኢትዮጵያ ካሌንደር</h2><p id="heroText">የሰንበት ትምህርት የትምህርት ቀናትን በቀላሉ ለተማሪዎች ለማየት የተዘጋጀ የድረ-ገጽ ካሌንደር።</p><p id="liveStatus" style="margin:8px 0 0;font-size:11px;color:var(--muted);font-weight:700"></p></section>
+<div class="filters">
+<input id="search" placeholder="🔎 ትምህርት / ፕሮግራም ፈልግ…" oninput="render()">
+<select id="group" onchange="render()"><option value="">ሁሉም ፕሮግራሞች</option></select>
+<select id="month" onchange="render()"><option value="">ሁሉም ወራት — 2019 ዓ.ም</option></select>
+</div>
+<div class="stats"><div class="stat"><b id="eventCount">0</b><span>የተመዘገቡ የትምህርት ቀናት</span></div><div class="stat"><b id="programCount">0</b><span>ፕሮግራሞች</span></div><div class="stat"><b>13</b><span>የ2019 ዓ.ም ወራት</span></div></div>
+
+<section id="todayDashboard" class="today-dashboard" aria-label="Today Dashboard">
+  <div class="today-card">
+    <div class="today-kicker" data-feature-i18n="todayKicker">TODAY DASHBOARD</div>
+    <div class="today-date" id="todayEthDate">—</div>
+    <div class="today-gdate" id="todayGregorianDate">—</div>
+    <div id="todayEvents"></div>
+    <div class="program-legend">
+      <span class="legend-item"><i class="legend-dot" style="background:var(--prog-lesson)"></i><span data-feature-i18n="lesson">Lesson</span></span>
+      <span class="legend-item"><i class="legend-dot" style="background:var(--prog-exam)"></i><span data-feature-i18n="exam">Exam</span></span>
+      <span class="legend-item"><i class="legend-dot" style="background:var(--prog-event)"></i><span data-feature-i18n="event">Event</span></span>
+      <span class="legend-item"><i class="legend-dot" style="background:var(--prog-meeting)"></i><span data-feature-i18n="meeting">Meeting</span></span>
+      <span class="legend-item"><i class="legend-dot" style="background:var(--prog-holiday)"></i><span data-feature-i18n="holiday">Holiday</span></span>
+    </div>
+  </div>
+  <div class="today-list">
+    <div class="today-kicker" data-feature-i18n="upcoming">UPCOMING</div>
+    <div class="next-title" data-feature-i18n="nextPrograms">Next scheduled programs</div>
+    <div id="upcomingEvents"></div>
+  </div>
+</section>
+
+<div id="calendarRoot"></div>
+</main>
+<footer>መሠረተ ሕይወት ሰንበት ትምህርት • Meserete Hiwot Sunday School • 2019 ዓ.ም</footer>
+<div id="modal" class="modal" onclick="if(event.target===this)closeModal()"><div class="dialog"><div class="dialogHead"><div><h3 id="modalTitle"></h3><div id="modalSub" class="meta"></div></div><button class="close" onclick="closeModal()">×</button></div><div id="modalBody"></div></div></div>
+<script>
+setTimeout(()=>document.getElementById('welcome').classList.add('hide'),2000);
+
+const MONTHS = ["መስከረም", "ጥቅምት", "ኅዳር", "ታኅሳስ", "ጥር", "የካቲት", "መጋቢት", "ሚያዚያ", "ግንቦት", "ሰኔ", "ሐምሌ", "ነሐሴ", "ጳጉሜን"];
+const WDS = ["ሰኞ", "ማክሰኞ", "ረብዑ", "ሐሙስ", "ዓርብ", "ቅዳሜ", "እሁድ"];
+const WDSHORT = ["ሰ", "ማ", "ረ", "ሐ", "ዓ", "ቅ", "እ"];
+
+let LANG = localStorage.getItem("mhss-calendar-lang") || "am";
+
+const I18N = {
+  am:{lang:"English",today:"ዛሬ",print:"አትም",
+      heroTitle:"2019 ዓ.ም የኢትዮጵያ ካሌንደር",
+      heroText:"የሰንበት ትምህርት የትምህርት ቀናትን በቀላሉ ለተማሪዎች ለማየት የተዘጋጀ የድረ-ገጽ ካሌንደር።",
+      search:"🔎 ትምህርት / ፕሮግራም ፈልግ…",
+      allPrograms:"ሁሉም ፕሮግራሞች",allMonths:"ሁሉም ወራት — 2019 ዓ.ም",
+      eventCount:"የተመዘገቡ የትምህርት ቀናት",programCount:"ፕሮግራሞች",
+      months13:"የ2019 ዓ.ም ወራት",noData:"የተገኘ መረጃ የለም።",
+      extra:n=>`+${n} ተጨማሪ`,footer:"መሠረተ ሕይወት ሰንበት ትምህርት • Meserete Hiwot Sunday School • 2019 ዓ.ም"},
+  en:{lang:"አማርኛ",today:"Today",print:"Print",
+      heroTitle:"2019 E.C. Ethiopian Calendar",
+      heroText:"A simple public calendar for students to view Sunday School teaching days and programs.",
+      search:"🔎 Search teaching / program…",
+      allPrograms:"All programs",allMonths:"All months — 2019 E.C.",
+      eventCount:"Scheduled teaching entries",programCount:"Programs",
+      months13:"Months in 2019 E.C.",noData:"No matching information found.",
+      extra:n=>`+${n} more`,footer:"Meserete Hiwot Sunday School • 2019 E.C."}
+};
+
+const MONTHS_EN=["Meskerem","Tikimt","Hidar","Tahsas","Tir","Yekatit","Megabit","Miyazya","Ginbot","Sene","Hamle","Nehase","Pagumen"];
+const WDS_EN=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+
+const GROUP_EN={
+ "የመሰረተ ሕይወት ሰንበት ትምህርት ቤት":"Meserete Hiwot Sunday School",
+ "የሕፃናት ትምህርት":"Children's Education",
+ "አዲስ የበገና ተማሪዎች":"New Begena Students",
+ "ነባር የበገና ተማሪዎች":"Existing Begena Students"
+};
+const ITEM_EN={
+ "የእንቁጣጣሽ አገልግሎት":"Enkutatash Service",
+ "የመሃረነ አብ ፀሎት":"Mehareneb Prayer",
+ "የልማት ሥራ":"Development Work",
+ "ተከታታይ ትምህርት":"Continuous Education",
+ "የበገና ትምህርት":"Begena Training"
+};
+function trGroup(g){return LANG==="en"?(GROUP_EN[g]||g):g;}
+function trItem(s){
+ if(LANG!=="en") return s;
+ let x=String(s);
+ Object.keys(ITEM_EN).forEach(k=>x=x.replaceAll(k,ITEM_EN[k]));
+ x=x.replaceAll("ከ ","From ").replaceAll("ከ","From ");
+ return x;
+}
+function currentMonths(){return LANG==="en"?MONTHS_EN:MONTHS;}
+function currentWds(){return LANG==="en"?WDS_EN:WDS;}
+function applyLanguage(){
+ const t=I18N[LANG];
+ document.documentElement.lang=LANG==="am"?"am":"en";
+ document.getElementById("langBtn").textContent=t.lang;
+ document.getElementById("todayBtn").textContent=t.today;
+ document.getElementById("printBtn").textContent=t.print;
+ document.getElementById("heroTitle").textContent=t.heroTitle;
+ document.getElementById("heroText").textContent=t.heroText;
+ document.getElementById("search").placeholder=t.search;
+ document.querySelector("#group option[value='']").textContent=t.allPrograms;
+ document.querySelector("#month option[value='']").textContent=t.allMonths;
+ const spans=document.querySelectorAll(".stat span");
+ spans[0].textContent=t.eventCount; spans[1].textContent=t.programCount; spans[2].textContent=t.months13;
+ document.querySelector("footer").textContent=t.footer;
+}
+function toggleLang(){
+ LANG=LANG==="am"?"en":"am";
+ localStorage.setItem("mhss-calendar-lang",LANG);
+ applyLanguage();
+ if(LIVE_MODE) buildLiveData();
+ initFilters(true);
+ render();
+ setLiveStatus(LIVE_MODE?"live":"offline", RAW_ROWS?RAW_ROWS.length:0);
+ updateTodayDashboard();
+}
+
+const BASE = new Date(Date.UTC(2026,8,11)); // 2019/1/1 = 2026-09-11
+let DATA = [];
+let GROUPS = [];
+
+/* ===== LIVE DATA: pulled from the shared mhss_calendar_events table (public rows only) =====
+   This page reads only events flagged is_public = true from Supabase. Everything else
+   (add / edit / delete / import) happens in the admin Events page (event.html); this
+   page is read-only and never writes to the database. */
+const EVENT_YEAR = 2019;
+let RAW_ROWS = null;   // last rows fetched from Supabase, cached so language toggle re-labels without refetching
+let LIVE_MODE = false; // true once a successful Supabase read has populated DATA
+
+const AUDIENCE_AM = {
+  "Everyone":"ሁሉም", "Sunday School":"ሰንበት ትምህርት ቤት", "Children":"ህፃናት",
+  "Begena New":"አዲስ የበገና ተማሪዎች", "Begena Existing":"ነባር የበገና ተማሪዎች",
+  "Teachers":"መምህራን", "Administrators":"አስተዳዳሪዎች"
+};
+const CATEGORY_AM = {
+  "Church":"ቤተክርስቲያን","Sunday School":"ሰንበት ትምህርት ቤት","Children":"ህፃናት",
+  "Begena":"በገና","Administration":"አስተዳደር","Special":"ልዩ ዝግጅት"
+};
+
+// Turn one mhss_calendar_events row into the {group,date,items} shape the renderer already understands.
+function rowToItem(row){
+  const en = LANG === "en";
+  const title = en ? (row.title_en || row.title_am || "Program") : (row.title_am || row.title_en || "ፕሮግራም");
+  const items = [title];
+  if(row.start_time || row.end_time){
+    const s = row.start_time ? row.start_time.slice(0,5) : "";
+    const e = row.end_time ? row.end_time.slice(0,5) : "";
+    items.push((en ? "From " : "ከ ") + s + (e ? " - "+e : ""));
+  }
+  const desc = en ? row.description_en : row.description_am;
+  if(desc) items.push(desc);
+  if(row.location) items.push((en ? "Location: " : "ቦታ: ") + row.location);
+  if(row.status && row.status !== "Scheduled") items.push((en ? "Status: " : "ሁኔታ: ") + row.status);
+  let group;
+  if(row.audience && row.audience !== "Everyone") group = en ? row.audience : (AUDIENCE_AM[row.audience] || row.audience);
+  else group = en ? (row.category || "Program") : (CATEGORY_AM[row.category] || row.category || "ፕሮግራም");
+  return {
+    group,
+    date: `${row.ethiopian_year}-${String(row.ethiopian_month).padStart(2,"0")}-${String(row.ethiopian_day).padStart(2,"0")}`,
+    items
+  };
+}
+
+function buildLiveData(){
+  if(!RAW_ROWS) return;
+  DATA = RAW_ROWS.map(rowToItem);
+  GROUPS = [...new Set(DATA.map(x=>x.group))];
+}
+
+function setLiveStatus(mode,count){
+  const el = document.getElementById("liveStatus");
+  if(!el) return;
+  const en = LANG === "en";
+  if(mode === "live"){
+    el.textContent = count>0
+      ? (en ? `🟢 Live — ${count} public entries from the database` : `🟢 ቀጥታ — ${count} ይፋዊ የመረጃ ቋት ውጤቶች`)
+      : (en ? "🟢 Connected — no public events have been added yet" : "🟢 ተገናኝቷል — እስካሁን ምንም ይፋዊ ዝግጅት አልተጨመረም");
+  }else if(mode === "loading"){
+    el.textContent = en ? "Connecting to the calendar database…" : "ከመረጃ ቋቱ ጋር በመገናኘት ላይ…";
+  }else{
+    el.textContent = en ? "🔴 Could not reach the calendar database — please try again shortly" : "🔴 ከመረጃ ቋቱ ጋር መገናኘት አልተቻለም — እባክዎ ትንሽ ቆይተው ይሞክሩ";
+  }
+}
+
+async function loadLiveEvents(){
+  setLiveStatus("loading");
+  try{
+    const { supabase } = await import("./supabaseClient.js");
+    const { data, error } = await supabase
+      .from("mhss_calendar_events")
+      .select("*")
+      .eq("is_public", true)
+      .eq("ethiopian_year", EVENT_YEAR)
+      .order("ethiopian_month").order("ethiopian_day");
+    if(error) throw error;
+    RAW_ROWS = data || [];
+    LIVE_MODE = true;
+    buildLiveData();
+    setLiveStatus("live", RAW_ROWS.length);
+  }catch(err){
+    console.warn("Public calendar: could not load events from the database —", err);
+    LIVE_MODE = false;
+    RAW_ROWS = [];
+    DATA = [];
+    GROUPS = [];
+    setLiveStatus("offline");
+  }
+  initFilters(true);
+  render();
+  updateTodayDashboard();
+}
+
+function ethToGregorian(y,m,d){
+  let days=(m-1)*30+(d-1);
+  return new Date(BASE.getTime()+days*86400000);
+}
+function parseKey(key){const [y,m,d]=key.split('-').map(Number);return {y,m,d};}
+function formatGregorian(date){return new Intl.DateTimeFormat('en-GB',{day:'2-digit',month:'short',year:'numeric',timeZone:'UTC'}).format(date);}
+function key(y,m,d){return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
+function filtered(){
+ const q=document.getElementById('search').value.trim().toLowerCase();
+ const g=document.getElementById('group').value, m=document.getElementById('month').value;
+ return DATA.filter(e=>{
+   const okq=!q || (e.group+' '+e.items.join(' ')).toLowerCase().includes(q);
+   const okg=!g || e.group===g;
+   const okm=!m || Number(e.date.split('-')[1])===Number(m);
+   return okq&&okg&&okm;
+ });
+}
+function initFilters(reset=false){
+ const gs=document.getElementById("group");
+ const oldG=reset?gs.value:"";
+ gs.innerHTML=`<option value="">${esc(I18N[LANG].allPrograms)}</option>`;
+ GROUPS.forEach(g=>gs.insertAdjacentHTML("beforeend",`<option value="${esc(g)}">${esc(trGroup(g))}</option>`));
+ if(oldG) gs.value=oldG;
+
+ const ms=document.getElementById("month");
+ const oldM=reset?ms.value:"";
+ ms.innerHTML=`<option value="">${esc(I18N[LANG].allMonths)}</option>`;
+ currentMonths().forEach((n,i)=>ms.insertAdjacentHTML("beforeend",`<option value="${i+1}">${esc(n)}</option>`));
+ if(oldM) ms.value=oldM;
+}
+function render(){
+ const data=filtered();
+ const map=new Map();
+ data.forEach(e=>{if(!map.has(e.date))map.set(e.date,[]);map.get(e.date).push(e)});
+ document.getElementById('eventCount').textContent=data.length;
+ document.getElementById('programCount').textContent=new Set(data.map(e=>e.group)).size;
+ const selected=document.getElementById('month').value;
+ const months=selected?[Number(selected)]:Array.from({length:13},(_,i)=>i+1);
+ const root=document.getElementById('calendarRoot'); root.innerHTML='';
+ months.forEach(m=>renderMonth(m,map,root));
+ if(!root.innerHTML) root.innerHTML=`<div class="emptyState">${esc(I18N[LANG].noData)}</div>`;
+}
+function renderMonth(m,map,root){
+ const first=ethToGregorian(2019,m,1);
+ const jsDay=first.getUTCDay(); // Sun=0
+ const mondayIndex=(jsDay+6)%7;
+ const days= m===13?5:30;
+ let out=`<section class="calendar"><div class="monthbar"><h3>${currentMonths()[m-1]} <small>${LANG==="en" ? "2019 E.C." : "2019 ዓ.ም"}</small></h3><small>${formatGregorian(first)} — ${formatGregorian(ethToGregorian(2019,m,days))}</small></div><div class="grid">`;
+ currentWds().forEach(x=>out+=`<div class="wd">${esc(x)}</div>`);
+ for(let i=0;i<mondayIndex;i++) out+='<div class="day empty"></div>';
+ for(let d=1;d<=days;d++){
+   const k=key(2019,m,d), ev=map.get(k)||[];
+   const gd=ethToGregorian(2019,m,d);
+   const todayK=key(2019, Math.floor((gd-BASE)/86400000/30)+1, 1); // unused
+   out+=`<div class="day ${ev.length?'has':''}" onclick="openDay('${k}')"><div class="num">${d}<span class="gdate">${formatGregorian(gd)}</span></div>`;
+   out+='<div class="chips">';
+   ev.slice(0,3).forEach(e=>out+=`<div class="chip">${esc(trGroup(e.group))}: ${esc(trItem(e.items[0]||"ፕሮግራም"))}</div>`);
+   if(ev.length>3) out+=`<div class="more">${I18N[LANG].extra(ev.length-3)}</div>`;
+   out+='</div></div>';
+ }
+ out+='</div></section>'; root.insertAdjacentHTML('beforeend',out);
+}
+function openDay(k){
+ const ev=filtered().filter(e=>e.date===k);
+ if(!ev.length)return;
+ const p=parseKey(k), gd=ethToGregorian(p.y,p.m,p.d);
+ document.getElementById("modalTitle").textContent=`${currentMonths()[p.m-1]} ${p.d}, ${p.y} ${LANG==="en"?"E.C.":"ዓ.ም"}`;
+ document.getElementById("modalSub").textContent=`${currentWds()[(gd.getUTCDay()+6)%7]} • ${formatGregorian(gd)}`;
+ document.getElementById("modalBody").innerHTML=ev.map(e=>`<div class="event"><b>${esc(trGroup(e.group))}</b><div class="meta">${e.items.map(trItem).map(esc).join("<br>")}</div></div>`).join("");
+ document.getElementById('modal').classList.add('show');
+}
+function closeModal(){document.getElementById('modal').classList.remove('show')}
+function goToday(){
+ // Today in this version is the current Ethiopian date if it falls in 2019; otherwise opens first month.
+ const now=new Date(); const diff=Math.floor((Date.UTC(now.getFullYear(),now.getMonth(),now.getDate())-BASE.getTime())/86400000);
+ if(diff>=0 && diff<120){const m=Math.floor(diff/30)+1;document.getElementById('month').value=m;render();}
+ else {document.getElementById('month').value=1;render();}
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+applyLanguage();initFilters();render();loadLiveEvents();
+
+/* ===== NEW FEATURES: Theme + Program Color System + Today Dashboard ===== */
+const FEATURE_I18N = {
+  am:{
+    todayKicker:"የዛሬ ማሳያ", upcoming:"ቀጣይ ፕሮግራሞች", nextPrograms:"ቀጣይ የተመዘገቡ ፕሮግራሞች",
+    noToday:"ዛሬ የተመዘገበ ፕሮግራም የለም።", noUpcoming:"ቀጣይ ፕሮግራም የለም።",
+    lesson:"ትምህርት", exam:"ፈተና", event:"ክስተት", meeting:"ስብሰባ", holiday:"በዓል",
+    dark:"☀️ Light / Dark", light:"🌙 Dark / Light", ec:"ዓ.ም"
+  },
+  en:{
+    todayKicker:"TODAY DASHBOARD", upcoming:"UPCOMING", nextPrograms:"Next scheduled programs",
+    noToday:"No program is scheduled for today.", noUpcoming:"No upcoming program found.",
+    lesson:"Lesson", exam:"Exam", event:"Event", meeting:"Meeting", holiday:"Holiday",
+    dark:"☀️ Light / Dark", light:"🌙 Dark / Light", ec:"E.C."
+  }
+};
+
+function featureText(key){
+  const l = (typeof LANG !== "undefined" && LANG === "en") ? "en" : "am";
+  return FEATURE_I18N[l][key] || key;
+}
+
+function normalizeProgramType(e){
+  const s = ((e.group||"") + " " + (e.items||[]).join(" ")).toLowerCase();
+  if(/exam|ፈተና/.test(s)) return "exam";
+  if(/meeting|ስብሰባ/.test(s)) return "meeting";
+  if(/holiday|ጥምቀት|በዓል|ፋሲካ|ልደት/.test(s)) return "holiday";
+  if(/event|program|ፕሮግራም|ክስተት/.test(s)) return "event";
+  return "lesson";
+}
+
+function programColorClass(e){
+  return "color-" + normalizeProgramType(e);
+}
+
+function applyProgramColor(el,e){
+  const type = normalizeProgramType(e);
+  const vars = {
+    lesson:"var(--prog-lesson)", exam:"var(--prog-exam)", event:"var(--prog-event)",
+    meeting:"var(--prog-meeting)", holiday:"var(--prog-holiday)"
+  };
+  el.style.borderLeft = "4px solid " + vars[type];
+}
+
+function updateTodayDashboard(){
+  if(typeof DATA === "undefined" || !Array.isArray(DATA)) return;
+
+  const today = new Date();
+  let target = null;
+
+  // Convert the current Gregorian date to Ethiopian date using the page's own converter.
+  try{
+    const gd = new Date(Date.UTC(today.getFullYear(),today.getMonth(),today.getDate()));
+    // Existing page data uses 2019 E.C.; calculate matching date by walking the 2019 calendar.
+    outer:
+    for(let m=1;m<=13;m++){
+      const days = m===13 ? 5 : 30;
+      for(let d=1;d<=days;d++){
+        const ed = ethToGregorian(2019,m,d);
+        if(ed.getUTCFullYear()===gd.getUTCFullYear() &&
+           ed.getUTCMonth()===gd.getUTCMonth() &&
+           ed.getUTCDate()===gd.getUTCDate()){
+          target = {m,d,key:key(2019,m,d)};
+          break outer;
+        }
+      }
+    }
+  }catch(err){}
+
+  // If the current date is outside the 2019 calendar, show the next scheduled 2019 entries.
+  const all = DATA.slice().sort((a,b)=>a.date.localeCompare(b.date));
+  const todayEvents = target ? all.filter(e=>e.date===target.key) : [];
+  const upcoming = target ? all.filter(e=>e.date>target.key).slice(0,5) : all.slice(0,5);
+
+  const ethDate = document.getElementById("todayEthDate");
+  const gregDate = document.getElementById("todayGregorianDate");
+  const todayEventsEl = document.getElementById("todayEvents");
+  const upcomingEl = document.getElementById("upcomingEvents");
+  if(!ethDate || !gregDate || !todayEventsEl || !upcomingEl) return;
+
+  if(target){
+    const gd = ethToGregorian(2019,target.m,target.d);
+    const months = typeof currentMonths==="function" ? currentMonths() : [];
+    ethDate.textContent = `${months[target.m-1] || ""} ${target.d}, 2019 ${featureText("ec")}`;
+    gregDate.textContent = formatGregorian(gd);
+  }else{
+    ethDate.textContent = (typeof LANG !== "undefined" && LANG==="en") ? "2019 E.C. calendar" : "የ2019 ዓ.ም ካሌንደር";
+    gregDate.textContent = new Date().toLocaleDateString();
+  }
+
+  todayEventsEl.innerHTML = todayEvents.length ? todayEvents.map(e=>{
+    const type = normalizeProgramType(e);
+    const title = (e.items||[]).map(trItem).join(" • ");
+    const group = trGroup(e.group);
+    return `<div class="today-event" onclick="openDay('${e.date}')" style="cursor:pointer">
+      <span class="today-dot" style="background:var(--prog-${type})"></span>
+      <div><div class="today-event-title">${esc(group)}</div>
+      <div class="today-event-sub">${esc(title)}</div>
+      <span class="program-chip color-${type}">${esc(featureText(type))}</span></div>
+    </div>`;
+  }).join("") : `<div class="today-empty">${featureText("noToday")}</div>`;
+
+  upcomingEl.innerHTML = upcoming.length ? upcoming.map(e=>{
+    const p=parseKey(e.date), gd=ethToGregorian(p.y,p.m,p.d);
+    const type=normalizeProgramType(e);
+    const title=(e.items||[]).map(trItem).join(" • ");
+    return `<div class="today-event" onclick="openDay('${e.date}')" style="cursor:pointer">
+      <span class="today-dot" style="background:var(--prog-${type})"></span>
+      <div><div class="today-event-title">${esc(trGroup(e.group))}</div>
+      <div class="today-event-sub">${esc(title)} · ${esc(formatGregorian(gd))}</div>
+      <span class="program-chip color-${type}">${esc(featureText(type))}</span></div>
+    </div>`;
+  }).join("") : `<div class="today-empty">${featureText("noUpcoming")}</div>`;
+
+  document.querySelectorAll("[data-feature-i18n]").forEach(el=>{
+    const k=el.getAttribute("data-feature-i18n");
+    el.textContent=featureText(k);
+  });
+}
+
+function toggleTheme(){
+  const dark = document.body.classList.toggle("dark");
+  localStorage.setItem("mhss-calendar-theme", dark ? "dark" : "light");
+  const btn=document.getElementById("themeToggle");
+  if(btn) btn.textContent=dark ? featureText("dark") : featureText("light");
+}
+function initTheme(){
+  const saved=localStorage.getItem("mhss-calendar-theme");
+  if(saved==="dark") document.body.classList.add("dark");
+  const btn=document.getElementById("themeToggle");
+  if(btn) btn.textContent=document.body.classList.contains("dark") ? featureText("dark") : featureText("light");
+}
+function scrollToToday(){
+  const el=document.getElementById("todayDashboard");
+  if(el) el.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+// Keep the three new features synchronized with the existing language switch.
+const _oldApplyLanguage = (typeof applyLanguage==="function") ? applyLanguage : null;
+if(_oldApplyLanguage){
+  const __applyLanguage = applyLanguage;
+  applyLanguage = function(){
+    __applyLanguage();
+    initTheme();
+    updateTodayDashboard();
+  };
+}
+document.addEventListener("DOMContentLoaded",()=>{
+  initTheme();
+  updateTodayDashboard();
+});
+
+</script>
+</body></html>
